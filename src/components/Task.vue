@@ -7,7 +7,7 @@
 
     <div>
       <div>
-        <button class="btn" @click="showModal = true">+ Create a new task</button>
+        <button class="btn" @click="openModal">+ Create a new task</button>
       </div>
       <table class="table table-striped">
         <thead>
@@ -19,10 +19,11 @@
 
         <tbody>
           <tr v-for="task in tasks" v-bind:key="task.id" :checked="task.completed">
-            <td><input type="checkbox" id="checkbox" v-model="task.completed" v-on:click="completedTask(task.id || 0, !task.completed)" /></td>
+            <td><input type="checkbox" id="checkbox" v-model="task.completed"
+                v-on:click="completedTask(task.id || 0, !task.completed)" /></td>
             <td>{{ task.details }}</td>
             <td>
-              <button class="btn btn-warning" @click="showModal = true">
+              <button class="btn btn-warning" @click="updateTask(task.id || 0, task.details || '')">
                 Update
               </button>
             </td>
@@ -35,13 +36,14 @@
         </tbody>
       </table>
 
-      <AddTask v-show="showModal" @close-modal="showModal = false" @CustomEventInputChanged="getTasks" />
+      <AddTask v-show="showModal" @close-modal="showModal = false" :selectedTaskId="selectedTaskId"
+        :selectedTaskDetails=selectedTaskDetails />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import type { TaskModel } from "@/models/TaskModel";
+import { TaskModel } from "@/models/TaskModel";
 import TaskDataService from "../services/TaskDataService";
 import AddTask from './AddTask.vue';
 
@@ -54,7 +56,9 @@ export default {
       showModal: false,
       tasks: [] as TaskModel[],
       message: "",
-      isChecked: false
+      isChecked: false,
+      selectedTaskId: 0,
+      selectedTaskDetails: ""
     }
   },
   methods: {
@@ -63,14 +67,32 @@ export default {
         this.tasks = response.data;
       })
     },
-    deleteTask(id: number) {
-      TaskDataService.deleteTask(id).then(() => {
+
+    async deleteTask(id: number) {
+      await TaskDataService.deleteTask(id).then(() => {
         this.getTasks();
       });
     },
-    completedTask(id: number, isChecked: boolean) {
-      TaskDataService.completedTask(id, isChecked);
+
+    async completedTask(id: number, isChecked: boolean) {
+      await TaskDataService.completedTask(id, isChecked);
     },
+
+    updateTask(taskId: number, details: string) {
+      this.selectedTaskId = taskId;
+      this.selectedTaskDetails = details;
+      this.showModal = true;
+    },
+
+    openModal() {
+      this.selectedTaskId = 0
+      this.selectedTaskDetails = "";
+      this.showModal = true;
+    },
+
+    addNewTask: (isAddNewTask: boolean) => {
+      console.log(isAddNewTask)
+    }
   },
   created() {
     this.getTasks();

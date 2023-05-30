@@ -3,16 +3,18 @@
 
 <template>
     <transition name="modal-fade">
-        <div class="modal-overlay" @click="$emit('close-modal')">
+        <div class="modal-overlay" @click="closeModal">
             <div class="modal" @click.stop>
                 <div class="content">
-                    <h2>Create task</h2>
-                    <textarea class="form-control" rows="5" v-model="details"></textarea>
+                    <h2 v-if="selectedTaskId == 0">Create task</h2>
+                    <h2 v-if="selectedTaskId > 0">Update task</h2>
+                    <textarea class="form-control" rows="5" :selectedTaskDetails="selectedTaskDetails" v-model="details"></textarea>
                     <div class="footer">
-                        <button class="btn btn-outline-primary" @click="$emit('close-modal')">
+                        <button class="btn btn-outline-primary" @click="closeModal">
                             Cancel
                         </button>
-                        <button class="btn btn-primary" @click="addTask(details)">Save</button>
+                        <button v-if="selectedTaskId == 0" class="btn btn-primary" @click="addTask()">Save</button>
+                        <button v-if="selectedTaskId > 0" class="btn btn-primary" @click="updateTask()">Update</button>
                     </div>
                 </div>
             </div>
@@ -27,24 +29,38 @@ import TaskDataService from "../services/TaskDataService";
 
 export default {
     name: "AddTasks",
+    props: ['selectedTaskId', 'selectedTaskDetails'],
     data() {
         return {
-            details: "",
+            details: '',
         }
     },
     methods: {
-        async addTask(details: string) {
-            await TaskDataService.createTask(new CreateOrUpdateTaskRequest(details))
+        async addTask() {
+            await TaskDataService.createTask(new CreateOrUpdateTaskRequest(this.details))
                 .then((response: any) => { })
                 .catch((error) => {
                     if (error) {
                         console.log(error);
                     }
                 });
-            this.$emit('close-modal');
-            this.details = ""
+            this.closeModal();
+            location.reload();
         },
-    }
+
+        closeModal() {
+            this.$emit('close-modal');
+            this.details = "";
+        },
+
+        async updateTask() {
+            if (this.selectedTaskId > 0) {
+                await TaskDataService.updateTask(this.selectedTaskId, new CreateOrUpdateTaskRequest(this.details));
+                this.closeModal();
+                location.reload();
+            }
+        }
+    },
 }
 </script>
   

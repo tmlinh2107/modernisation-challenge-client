@@ -8,23 +8,23 @@ export default class TaskDataService {
         return await axios.get(`${TASK_API_URL}`);
     }
 
-    static getTaskById(id: number) {
-        return axios.get(`${TASK_API_URL}/${id}`);
+    static async getTaskById(id: number) {
+        return await axios.get(`${TASK_API_URL}/${id}`);
     }
 
     static async createTask(model: CreateOrUpdateTaskRequest) {
         return await axios.post(`${TASK_API_URL}`, model);
     }
 
-    static updateTask(id: number, detail: string) {
-        return axios.put(`${TASK_API_URL}/${id}`, detail);
+    static async updateTask(id: number, modal: CreateOrUpdateTaskRequest) {
+        return await axios.put(`${TASK_API_URL}/${id}`, modal);
     }
 
-    static deleteTask(id: number) {
-        return axios.delete(`${TASK_API_URL}/${id}`);
+    static async deleteTask(id: number) {
+        return await axios.delete(`${TASK_API_URL}/${id}`);
     }
  
-    static completedTask(id: number, isCompleted: boolean) {
-        return axios.put(`${TASK_API_URL}/${id}/completed?isCompleted=${isCompleted}`);
+    static async completedTask(id: number, isCompleted: boolean) {
+        return await axios.put(`${TASK_API_URL}/${id}/completed?isCompleted=${isCompleted}`);
     }
 }
