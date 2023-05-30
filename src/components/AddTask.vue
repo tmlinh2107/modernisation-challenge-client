@@ -3,22 +3,26 @@
 
 <template>
     <transition name="modal-fade">
-        <div class="modal-overlay" @click="closeModal">
-            <div class="modal" @click.stop>
+        <div class="modal-overlay">
+            <div class="modal">
                 <div class="content">
                     <h2 v-if="selectedTaskId == 0">Create task</h2>
                     <h2 v-if="selectedTaskId > 0">Update task</h2>
-                    <textarea class="form-control" rows="5" :selectedTaskDetails="selectedTaskDetails" v-model="details"></textarea>
+                    <label v-if="selectedTaskId > 0">Task: {{ selectedTaskDetails }}</label>
+                    <textarea class="form-control" rows="5" :selectedTaskDetails="selectedTaskDetails" v-model="details"
+                        required placeholder="Enter the details of the task"></textarea>
+                    <span v-if="error.length > 0" class="txtError">{{ error }}</span>
                     <div class="footer">
                         <button class="btn btn-outline-primary" @click="closeModal">
                             Cancel
                         </button>
-                        <button v-if="selectedTaskId == 0" class="btn btn-primary" @click="addTask()">Save</button>
-                        <button v-if="selectedTaskId > 0" class="btn btn-primary" @click="updateTask()">Update</button>
+                        <button type="submit" v-if="selectedTaskId == 0" class="btn btn-primary"
+                            @click="addTask()">Save</button>
+                        <button type="submit" v-if="selectedTaskId > 0" class="btn btn-primary"
+                            @click="updateTask()">Update</button>
                     </div>
                 </div>
             </div>
-
         </div>
     </transition>
 </template>
@@ -33,32 +37,47 @@ export default {
     data() {
         return {
             details: '',
+            error: ''
         }
     },
     methods: {
         async addTask() {
-            await TaskDataService.createTask(new CreateOrUpdateTaskRequest(this.details))
-                .then((response: any) => { })
-                .catch((error) => {
-                    if (error) {
-                        console.log(error);
-                    }
-                });
-            this.closeModal();
-            location.reload();
+            if (this.checkValidation()) {
+                await TaskDataService.createTask(new CreateOrUpdateTaskRequest(this.details))
+                    .then((response: any) => { })
+                    .catch((error) => {
+                        if (error) {
+                            console.log(error);
+                        }
+                    });
+                this.closeModal();
+                location.reload();
+            }
         },
 
         closeModal() {
             this.$emit('close-modal');
             this.details = "";
+            this.error = "";
         },
 
         async updateTask() {
             if (this.selectedTaskId > 0) {
-                await TaskDataService.updateTask(this.selectedTaskId, new CreateOrUpdateTaskRequest(this.details));
-                this.closeModal();
-                location.reload();
+                if (this.checkValidation()) {
+                    await TaskDataService.updateTask(this.selectedTaskId, new CreateOrUpdateTaskRequest(this.details));
+                    this.closeModal();
+                    location.reload();
+                }
             }
+        },
+
+        checkValidation() {
+            if (this.details == "") {
+                this.error = "The details of the task must not be empty."
+                return false;
+            }
+
+            return true;
         }
     },
 }
@@ -93,7 +112,7 @@ export default {
     display: block;
     position: relative;
     margin: 25px auto;
-    max-height: calc(100vh - 300px);
+    max-height: calc(100vh - 200px);
 }
 
 .close {
@@ -121,5 +140,9 @@ button {
     font-size: 14px;
     border-radius: 16px;
     margin-top: 50px;
+}
+
+.txtError {
+    color: red;
 }
 </style>
