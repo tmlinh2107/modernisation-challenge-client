@@ -1,0 +1,118 @@
+@import './base.css';
+
+* {
+  font-family: 'Rubik', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  color: #000000;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  border-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  font-weight: normal;
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+  }
+}
+
+/**************************************************************************************************/
+
+/* Checkbox */
+
+span.checkbox > input {
+  -webkit-appearance: none;
+  appearance: none;
+  background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'><rect x='0.5' y='0.5' width='15' height='15' rx='3' fill='%23f9f9fc' /><rect x='0.5' y='0.5' width='15' height='15' rx='3' fill='none' stroke='%23a6aec1' stroke-width='1' /></svg>");
+  border-radius: 3px;
+  box-shadow: 0px 1px 1px #131f151a;
+  box-sizing: border-box;
+  content: "";
+  cursor: pointer;
+  display: inline-block;
+  flex-shrink: 0;
+  height: 16px;
+  transition: background-color ease-in-out 150ms, background-image ease-in-out 150ms, border-color ease-in-out 150ms;
+  vertical-align: -3px;
+  width: 16px;
+}
+
+  span.checkbox > input:checked {
+      background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'><rect x='0.5' y='0.5' width='15' height='15' rx='3' fill='%2300b2d5bf' /><rect x='0.5' y='0.5' width='15' height='15' rx='3' fill='none' stroke='%2300b2d5' stroke-width='1' /><path d='M 6.652 10.894 l -2.545 -2.563 a 0.362 0.362 0 0 1 0 -0.513 l 0.514 -0.513 a 0.366 0.366 0 0 1 0.514 0 l 1.775 1.794 3.956 -3.994 a 0.365 0.365 0 0 1 0.514 0 l 0.514 0.513 a 0.361 0.361 0 0 1 0 0.511 l -4.728 4.764 a 0.366 0.366 0 0 1 -0.514 0' fill='%23fff' /></svg>");
+  }
+
+  /* Table */
+
+
+/* Text box */
+
+fieldset > textarea.text {
+  width: 100%;
+}
+
+textarea.text {
+  background: #fcfcfc;
+  border: 1px solid #a6aec1;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: #2c2c2c;
+  display: inline-block;
+  font: normal 14px "Poppins", sans-serif;
+  outline: none;
+  padding: 8px 14px;
+  transition: background-color ease-in-out 150ms, border-color ease-in-out 150ms;
+  resize: vertical;
+  width: 250px;
+}
+
+  textarea.text:focus {
+      background: #ffffff;
+      border: 1px solid #00b2d5;
+  }
+
+  textarea.text:hover {
+      background: #ffffff;
+  }
+
+/* Typography */
+
+h1 {
+  color: #2c2c2c;
+  font: 600 26px "Poppins", sans-serif;
+  letter-spacing: 0;
+  margin: 0 0 25px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+h2 {
+  color: #2c2c2c;
+  font: 600 20px "Poppins", sans-serif;
+  letter-spacing: 0;
+  margin: 0 0 25px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
